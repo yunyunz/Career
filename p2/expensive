@@ -1,0 +1,11 @@
+SELECT title, year, price 
+FROM 
+(SELECT yo0.club, yo0.title, yo0.year, yo0.price, yb0.language 
+FROM yrb_offer yo0, yrb_book yb0 
+WHERE yb0.language='English' AND yo0.title=yb0.title AND yo0.year=yb0.year) 
+WHERE price > (SELECT avg(price) FROM (SELECT club, MAX(price) AS price 
+
+FROM (SELECT yo1.club, yo1.title, yo1.year, yo1.price, yb1.language FROM yrb_offer yo1, yrb_book yb1 
+WHERE  yb1.language='English' AND yo1.title=yb1.title AND yo1.year=yb1.year) 
+
+GROUP BY club));

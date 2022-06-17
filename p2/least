@@ -1,0 +1,7 @@
+
+SELECT least.club, least.count 
+FROM (SELECT club, COUNT(cid) AS count FROM yrb_member GROUP BY club) least 
+WHERE least.count=(SELECT MIN(nt.count) AS count 
+FROM(SELECT club, COUNT(cid) AS count FROM yrb_member GROUP BY club) nt);
+
+

@@ -1,0 +1,10 @@
+SELECT distinct yc1.name AS namea, yc2.name AS nameb
+FROM yrb_customer yc1, yrb_customer yc2, 
+(SELECT yp1.cid AS a, yp2.cid AS b
+FROM yrb_purchase yp1 JOIN yrb_purchase yp2 
+ON yp1.title = yp2.title AND yp1.year = yp2.year AND yp2.cid > yp1.cid) p
+WHERE yc1.cid = p.a and yc2.cid = p.b
+;
+
+
+

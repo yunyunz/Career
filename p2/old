@@ -1,0 +1,3 @@
+SELECT yc.name, pp.day 
+FROM yrb_customer yc INNER JOIN pretty_purchase pp
+ON yc.cid = pp.cid WHERE year(pp.day) < 1998;

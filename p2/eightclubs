@@ -1,0 +1,1 @@
+SELECT title, year FROM(SELECT title, year, count(club) AS cb from yrb_offer GROUP BY title, year) WHERE cb=8;

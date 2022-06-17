@@ -1,0 +1,19 @@
+SELECT name, cat, cost FROM yrb_customer yc, 
+
+(SELECT cid, cat, SUM(cost) as cost 
+
+FROM
+
+(SELECT yp2.cid, yb2.cat, yp2.year, yp2.cost 
+
+FROM yrb_book yb2, 
+
+(SELECT yp1.cid, yo1.title, yo1.year, yo1.price AS cost 
+
+FROM yrb_purchase yp1, yrb_offer yo1 
+
+WHERE yp1.title=yo1.title AND yp1.year=yo1.year AND yp1.club=yo1.club) yp2 
+
+WHERE yp2.title=yb2.title AND yp2.year=yb2.year) GROUP BY cid, cat) yp 
+
+WHERE yp.cid=yc.cid;

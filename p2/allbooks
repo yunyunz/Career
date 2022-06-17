@@ -1,0 +1,9 @@
+SELECT yc.name, tb.cat as category, tb.language
+FROM yrb_customer yc, 
+(SELECT language, cat, COUNT(*) AS count FROM yrb_book GROUP BY language, cat HAVING COUNT(*) > 1) tc, 
+(SELECT cid, language, cat, COUNT(*) AS count FROM (SELECT yp.cid, yb.title, yb.year, yb.language, yb.cat
+FROM yrb_book yb, yrb_purchase yp WHERE yb.title = yp.title AND yb.year = yp.year 
+GROUP BY yp.cid, yb.title, yb.year, yb.language, yb.cat) GROUP BY cid, language, cat) tb
+WHERE tc.language = tb.language AND tc.cat = tb.cat AND tc.count = tb.count AND tb.cid = yc.cid
+;
+

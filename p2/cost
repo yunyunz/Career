@@ -1,0 +1,18 @@
+SELECT yc.name, c.day, c.cost FROM yrb_customer yc, (
+SELECT cid, cast(when AS date) AS day, max(cost) AS cost 
+FROM ((SELECT cid, when, min(cost) AS cost 
+FROM (SELECT tmp2.cid, tmp2.when, (tmp2.cost+ys.cost) AS cost FROM yrb_shipping ys 
+FULL OUTER JOIN (SELECT cid, when, sum(weight_per_title) AS weight, sum(cost_wth_qnty) AS cost 
+FROM (SELECT tmp1.cid, tmp1.title, tmp1.when, (tmp1.qnty*tmp1.weight) AS weight_per_title, (yo.price*qnty) 
+AS cost_wth_qnty FROM yrb_offer yo, (SELECT yp.cid, yp.title, yp.when, yp.qnty, yb.weight, yp.club, yp.year 
+FROM yrb_purchase yp, yrb_book yb WHERE yb.title=yp.title and yb.year=yp.year)tmp1 WHERE tmp1.title=yo.title 
+and tmp1.year=yo.year and tmp1.club=yo.club) GROUP BY cid, when order by cid)tmp2 ON tmp2.weight<=ys.weight) 
+WHERE cost is not null GROUP BY cid, when order by cid) UNION (SELECT cid, when, max(cost) AS cost 
+FROM (SELECT tmp2.cid, tmp2.when, (tmp2.cost+ys.cost) AS cost FROM yrb_shipping ys 
+FULL OUTER JOIN (SELECT cid, when, sum(weight_per_title) AS weight, sum(cost_wth_qnty) AS cost 
+FROM (SELECT tmp1.cid, tmp1.title, tmp1.when, (tmp1.qnty*tmp1.weight) AS weight_per_title, (yo.price*qnty) AS cost_wth_qnty 
+FROM yrb_offer yo, (SELECT yp.cid, yp.title, yp.when, yp.qnty, yb.weight, yp.club, yp.year 
+FROM yrb_purchase yp, yrb_book yb WHERE yb.title=yp.title and yb.year=yp.year)tmp1 
+WHERE tmp1.title=yo.title and tmp1.year=yo.year and tmp1.club=yo.club) GROUP BY cid, when order by cid)tmp2 on tmp2.weight>=ys.weight) 
+WHERE cost is not null GROUP BY cid, when order by cid)) GROUP BY cid, when order by cid) c
+WHERE yc.cid = c.cid;

@@ -1,0 +1,22 @@
+SELECT yc.name, r.cat, r.cost 
+
+FROM (SELECT c2.cid, c3.cat, c2.cost 
+
+FROM (SELECT cid, max(cost) AS cost 
+
+FROM (SELECT tb.cid, yb.cat, sum(tb.price) AS cost 
+
+FROM (SELECT yp.cid, yp.title, yo.price, yp.year 
+
+FROM yrb_purchase yp, yrb_offer yo WHERE yp.title=yo.title AND yp.year=yo.year AND yp.club=yo.club)tb, yrb_book yb 
+
+WHERE tb.title=yb.title AND tb.year=yb.year GROUP BY tb.cid, yb.cat) GROUP BY cid)c2, 
+
+(SELECT tb.cid, yb.cat, sum(tb.price) AS cost 
+
+FROM (SELECT yp.cid, yp.title, yo.price, yp.year 
+
+FROM yrb_purchase yp, yrb_offer yo WHERE yp.title=yo.title AND yp.year=yo.year AND yp.club=yo.club)tb, yrb_book yb 
+WHERE tb.title=yb.title AND tb.year=yb.year GROUP BY tb.cid, yb.cat) c3 
+
+WHERE c2.cost=c3.cost AND c2.cid=c3.cid)r, yrb_customer yc WHERE r.cid=yc.cid;
