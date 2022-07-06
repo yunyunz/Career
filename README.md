@@ -1,2 +1,2 @@
 # Career
-I will up load and after last day of my FT job.
+This repositries will upload projects regarding web design, SQL design, and Java App.
